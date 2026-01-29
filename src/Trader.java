@@ -1,5 +1,6 @@
 
 public class Trader extends Person {
+    private Portfolio portfolio;
     private int id ;
     private float soldInitial;
 

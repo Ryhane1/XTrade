@@ -10,8 +10,8 @@ public class Main {
         System.out.println("3. Quitter ");
         choix = add.nextInt();
         switch (choix) {
-            case 1 -> menuAdmin(add);
-            case 2 -> menuTrader(add);
+            case 1 -> menuAdmin();
+            case 2 -> menuTrader();
             case 3 -> System.out.println("Au revoir !");
             default -> System.out.println("Choix Invalid ! ");
 //            case 4 -> withdrawSold(add);
@@ -40,12 +40,11 @@ public class Main {
 //        }else {
 //            System.out.println("Choix Invalid !!");
 //        }
-//    }
-    public static int menuAdmin(){
+
+    public static void menuAdmin(){
         Scanner add = new Scanner(System.in);
         int choix ;
         System.out.println("");
-//        System.out.println("1. Ajouter Person ");
         System.out.println("1. Ajouter Trader ");
         System.out.println("2. Ajouter Portfolio ");
         System.out.println("3. Ajouter Action ");
@@ -55,7 +54,7 @@ public class Main {
         System.out.println("7. Supprimer Action ");
         System.out.println("8. Supprimer Crypto ");
         System.out.println("9. Quitter Menu Admin ");
-        return choix = add.nextInt();
+        choix = add.nextInt();
         switch (choix) {
             case 1 -> Platform.addTrader(add);
             case 2 -> Platform.addPortfolio(add) ;
@@ -71,10 +70,10 @@ public class Main {
 
 
     }
-    public static int menuTrader(){
+    public static void menuTrader(){
         Scanner add = new Scanner(System.in);
         int choix ;
-        System.out.println("");
+        System.out.println(" ");
         System.out.println("1. Acheter Action ");
         System.out.println("2. Acheter Crypto ");
         System.out.println("3. Consulter Portfolio ");
@@ -82,9 +81,10 @@ public class Main {
         System.out.println("5. Quitter Menu Trader ");
 //        System.out.println("1. Supprimer Portfolio ");
 //        System.out.println("1. Supprimer Trader ");
-        return choix = add.nextInt();
+        choix = add.nextInt();
         switch (choix){
-            case 1 ->
+            case 1 -> Platform.byAction(add);
+            case 2 -> Platform.byCrypto(add);
         }
     }
 
