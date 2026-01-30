@@ -4,16 +4,16 @@ import java.util.List;
 public class Portfolio {
         private Trader trader;
         private float balance;
-        private ArrayList<Postion> postions;
+        private ArrayList<Actif> Actifs = new ArrayList<>();
 
-    public Portfolio(Trader trader, float balance, ArrayList<Postion> postions) {
+    public Portfolio(Trader trader, float balance, ArrayList<Actif> Actifs) {
         this.trader = trader;
         this.balance = balance;
-        this.postions =  new ArrayList<>();
+        this.Actifs =  new ArrayList<>();
     }
 
     public Portfolio() {
-        this.postions =  new ArrayList<>();
+        this.Actifs =  new ArrayList<>();
 
     }
 
@@ -27,28 +27,28 @@ public class Portfolio {
                 System.out.println("Solde insuffisant !");
                 return;
             }
-            for (Postion p : postions){
+            for (Actif p : Actifs){
             if (asset == p.getAsset() ){
                 float quantite = budget / asset.getPrixUnitaire();
                 p.setQuantite(p.getQuantite()+quantite);
                 return;
             }}
             float quantite = budget / asset.getPrixUnitaire();
-            postions.add(new Postion(asset, quantite, budget));
+            Actifs.add(new Actif(asset, quantite, budget));
             balance -= budget;
             System.out.println("Achat réussi !!");
         }
 
-        public ArrayList<Postion> getPostions() {
-            return postions;
+        public ArrayList<Actif> getActifs() {
+            return Actifs;
         }
 
         public float getBalance() {
             return balance;
         }
 
-    public void setPostions( Postion position) {
-        this.postions.add(position);
+    public void setActifs( Actif actif) {
+        this.Actifs.add(actif);
     }
 
     public Trader getTrader() {
@@ -63,8 +63,8 @@ public class Portfolio {
         this.balance = balance;
     }
 
-    public void setPosts(ArrayList<Postion> positions) {
-        this.postions = positions;
+    public void setPosts(ArrayList<Actif> actifs) {
+        this.Actifs = actifs;
     }
 
 

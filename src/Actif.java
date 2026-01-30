@@ -1,10 +1,10 @@
-public class Postion {
+public class Actif {
 
     private Asset asset;
     private float quantite;
     private float valeurAchat;
 
-    public Postion(Asset asset, float quantite, float valeurAchat) {
+    public Actif(Asset asset, float quantite, float valeurAchat) {
         this.asset = asset;
         this.quantite = quantite;
         this.valeurAchat = valeurAchat;

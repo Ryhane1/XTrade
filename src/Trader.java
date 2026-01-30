@@ -4,6 +4,7 @@ public class Trader extends Person {
     private int id ;
     private float soldInitial;
 
+
     public Trader(String nom, String mail, int id, float soldInitial) {
         super(nom, mail);
         this.id = id;
