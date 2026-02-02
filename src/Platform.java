@@ -42,11 +42,12 @@ public class Platform {
         for (Trader t : traders){
             if (idT == t.getId()){
             float blance = t.getSoldInitial();
-            Portfolio p = new Portfolio(t,blance);
-            portfolios.add(p);}
-            else {System.out.println("Trader n'existe pas !");}
+//            Portfolio p = ;
+            portfolios.add(new Portfolio(t,blance));
             System.out.println("Portfolio Creer avec Succes !!");
-        }
+            return;
+            }
+        } System.out.println("Trader n'existe pas !");
     }
     public static Portfolio findPortfolio(int idby){
         Portfolio d = null;
@@ -64,13 +65,13 @@ public class Platform {
                 for (Portfolio p : portfolios) {
             System.out.println("ID : " + p.getTrader().getId() + " , Nom du Trader : " + p.getTrader().getNom()
                     + " , Balance : " + p.getBalance());
-                    if (p.getActifs().isEmpty()) { System.out.println("La liste des Assets est vide.");return;}
-                    System.out.println("Les Asstes : ");
-            for (Actif r : p.getActifs()){
-                System.out.println("Nom du d'Asset : " + r.getAsset().getNom()
-                        + " Quatite : " + r.getQuantite()
-                        + " Prix Unitaire : " + r.getAsset().getPrixUnitaire());
-                 }
+//                    if (p.getActifs().isEmpty()) { System.out.println("La liste des Assets est vide.");return;}
+//                    System.out.println("Les Asstes : ");
+//            for (Actif r : p.getActifs()){
+//                System.out.println("Nom du d'Asset : " + r.getAsset().getNom()
+//                        + " Quatite : " + r.getQuantite()
+//                        + " Prix Unitaire : " + r.getAsset().getPrixUnitaire());
+//                 }
              }
         }
     }
@@ -86,22 +87,23 @@ public class Platform {
         Portfolio p = findPortfolio(idby);
         Asset.displayCryptos();
         System.out.println("Entre le Nom du Crypto a Acheter : ");
+        add.nextLine();
         String nom = add.nextLine();
         System.out.println("Entre le Montant a Acheter : ");
         float budget = add.nextFloat();
         Asset c = Asset.findCrypto(nom);
-        p.acheterAsset(c,budget);
+//        p.acheterAsset(c,budget);
         float quantite = budget/c.getPrixUnitaire();
         Actif r = new Actif(c,quantite,budget);
         p.setActifs(r);
-        p.setActifs(new Actif(c,quantite,budget));
+//        p.setActifs(new Actif(c,quantite,budget));
         LocalDateTime date = LocalDateTime.now();
-        String typeT = "Achat Action ";
-        transactions.add(new Transaction(typeT,date,p.getTrader(),r));
+        String typeT = "Achat Crypto ";
+        transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est fait !!");
         System.out.println("Vous avez Acheter la quatite : "+quantite
                 +" , du Crypto : "+c.getNom()
-                +"avec une Valeur de : "+budget);
+                +" , avec une Valeur de : "+budget);
     }
     public static void byAction(Scanner add){
         System.out.println("Entre votre ID Portfolio : ");
@@ -109,6 +111,7 @@ public class Platform {
         Portfolio p = findPortfolio(idby);
         Asset.displayActions();
         System.out.println("Entre le Nom d'action a Acheter : ");
+        add.nextLine();
         String nom = add.nextLine();
         System.out.println("Entre le Montant a Acheter : ");
         float budget = add.nextFloat();
@@ -119,11 +122,11 @@ public class Platform {
         p.setBalance(p.getBalance()-budget);
         LocalDateTime date = LocalDateTime.now();
         String typeT = "Achat Action ";
-        transactions.add(new Transaction(typeT,date,p.getTrader(),r));
+        transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est Fait !!");
         System.out.println("Vou avez acheter la Quatiter : "+quantite
                 +" , d'Action : "+a.getNom()
-                +"Avec une Valeur de : "+budget);
+                +" , Avec une Valeur de : "+budget);
     }
     public static void displayPortfolio(Scanner add){
         System.out.println("Entre Portfolio ID : ");
@@ -157,9 +160,10 @@ public class Platform {
         Portfolio p = findPortfolio(id);
         displayPortfolioID(id);
         System.out.println("Entre le nom d'Asset a vendre : ");
+        add.nextLine();
         String nom = add.nextLine();
         for (Actif r : p.getActifs()){
-            if (nom == r.getAsset().getNom()){
+            if (nom.equals(r.getAsset().getNom())){
                 System.out.println("Nom d'Asset : "+r.getAsset().getNom()
                         +" , La Quantité : "+r.getQuantite()
                         +" , le Prix Unitaire : "+r.getAsset().getPrixUnitaire());
@@ -172,8 +176,11 @@ public class Platform {
                 r.setQuantite(r.getQuantite()-quantite);
                 p.setBalance(p.getBalance()+(quantite*r.getAsset().getPrixUnitaire()));
                 LocalDateTime date = LocalDateTime.now();
+                float valeur = quantite*r.getAsset().getPrixUnitaire();
+                float g = r.getValeurAchat()- valeur;
+                r.setValeurAchat(g);
                 String typeT = "Vente Asset ";
-                transactions.add(new Transaction(typeT,date,p.getTrader(),r));
+                transactions.add(new Transaction(typeT,date,p.getTrader(),r,valeur));
                 System.out.println("la Vente est fait avec Succes !!");
             }
         }
@@ -182,7 +189,7 @@ public class Platform {
         for (Transaction t : transactions){
             System.out.println("Type de Transaction : "+t.getType()+" , Date : " +t.getDate()
                     +" , Trader Nom : "+t.getTrader().getNom()+" , ID : "+t.getTrader().getId()+" , Asset : "
-                    +t.getActif().getAsset().getNom()+" , Valeur : "+t.getActif().getValeurAchat());
+                    +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur());
         }
     }
 

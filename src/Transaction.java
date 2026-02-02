@@ -5,17 +5,23 @@ public class Transaction {
     private LocalDateTime date ;
     private Trader trader;
     private Actif actif ;
+    private float valeur ;
 
-    public Transaction(String type, LocalDateTime date, Trader trader, Actif actif) {
+    public Transaction(String type, LocalDateTime date, Trader trader, Actif actif, float valeur) {
         this.type = type;
         this.date = date;
         this.trader = trader;
         this.actif = actif;
+        this.valeur = valeur;
     }
 
+    public float getValeur() {
+        return valeur;
+    }
 
-
-
+    public void setValeur(float valeur) {
+        this.valeur = valeur;
+    }
 
     public LocalDateTime getDate() {
         return date;
