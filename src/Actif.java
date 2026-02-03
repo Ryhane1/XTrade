@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Actif {
 
     private Asset asset;
@@ -33,5 +35,20 @@ public class Actif {
     public void setValeurAchat(float valeurAchat) {
         this.valeurAchat = valeurAchat;
     }
+
+
+    public static void test(Scanner add){
+        System.out.println("entre le montant");
+        float valeur = add.nextFloat();
+        for (Asset a : Asset.Cryptos){
+            if (valeur< a.getPrixUnitaire()){
+                System.out.println(a);
+            }
+        }
+    }
+
+
+
+
 }
 

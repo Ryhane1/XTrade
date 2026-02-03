@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 abstract class Asset {
@@ -109,5 +108,12 @@ abstract class Asset {
         return null;
     }
 
-
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "nom='" + nom + '\'' +
+                ", prixUnitaire=" + prixUnitaire +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

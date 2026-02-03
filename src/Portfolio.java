@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Portfolio {
         private Trader trader;
@@ -10,11 +9,6 @@ public class Portfolio {
         this.trader = trader;
         this.balance = balance;
         this.Actifs =  new ArrayList<>();
-    }
-
-    public Portfolio() {
-        this.Actifs =  new ArrayList<>();
-
     }
 
     public Portfolio(Trader trader, float balance) {
@@ -28,15 +22,25 @@ public class Portfolio {
                 return;
             }
             for (Actif r : Actifs){
+                System.out.println("loop");
             if (asset == r.getAsset() ){
+                System.out.println("if alt");
                 float quantite = budget / asset.getPrixUnitaire();
                 r.setQuantite(r.getQuantite()+quantite);
-                return;
-            }}
-            float quantite = budget / asset.getPrixUnitaire();
-            Actifs.add(new Actif(asset, quantite, budget));
-            balance -= budget;
-            System.out.println("Achat réussi !!");
+                balance -= budget;
+                System.out.println("Achat réussi !!");
+            }else {
+                float quantite = budget / asset.getPrixUnitaire();
+                Actifs.add(new Actif(asset, quantite, budget));
+                System.out.println("else");
+                balance -= budget;
+                System.out.println("Achat réussi !!");
+            }
+            }
+//            float quantite = budget / asset.getPrixUnitaire();
+//            Actifs.add(new Actif(asset, quantite, budget));
+//            balance -= budget;
+//            System.out.println("Achat réussi !!");
         }
 
         public ArrayList<Actif> getActifs() {

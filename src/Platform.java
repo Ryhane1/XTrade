@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -7,7 +8,7 @@ public class Platform {
 
     static ArrayList<Trader> traders = new ArrayList<>();
     static ArrayList<Portfolio> portfolios = new ArrayList<>();
-    static ArrayList<Transaction> transactions = new ArrayList<>();
+    static List<Transaction> transactions = new ArrayList<>();
 
     public static void addTrader(Scanner add){
         System.out.println("Entre le nom : ");
@@ -96,9 +97,8 @@ public class Platform {
         float quantite = budget/c.getPrixUnitaire();
         Actif r = new Actif(c,quantite,budget);
         p.setActifs(r);
-//        p.setActifs(new Actif(c,quantite,budget));
         LocalDateTime date = LocalDateTime.now();
-        String typeT = "Achat Crypto ";
+        String typeT = "Achat";
         transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est fait !!");
         System.out.println("Vous avez Acheter la quatite : "+quantite
@@ -121,7 +121,7 @@ public class Platform {
         p.setActifs(r);
         p.setBalance(p.getBalance()-budget);
         LocalDateTime date = LocalDateTime.now();
-        String typeT = "Achat Action ";
+        String typeT = "Achat";
         transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est Fait !!");
         System.out.println("Vou avez acheter la Quatiter : "+quantite
@@ -132,8 +132,8 @@ public class Platform {
         System.out.println("Entre Portfolio ID : ");
         int idd = add.nextInt();
         Portfolio p = findPortfolio(idd);
-        System.out.println("ID : "+p.getTrader().getId()+"Nom du Trader : "+p.getTrader().getNom()
-                +" Balance : "+p.getBalance());
+        System.out.println("ID : "+p.getTrader().getId()+" , Nom du Trader : "+p.getTrader().getNom()
+                +" , Balance : "+p.getBalance());
         System.out.println("Les Asstes : ");
         for (Actif r : p.getActifs()){
             System.out.println("Nom d'Asset : " + r.getAsset().getNom()
@@ -144,8 +144,8 @@ public class Platform {
     }
     public static void displayPortfolioID(int id){
         Portfolio p = findPortfolio(id);
-        System.out.println("ID : "+p.getTrader().getId()+"Nom du Trader : "+p.getTrader().getNom()
-                +" Balance : "+p.getBalance());
+        System.out.println("ID : "+p.getTrader().getId()+" , Nom du Trader : "+p.getTrader().getNom()
+                +" , Balance : "+p.getBalance());
         System.out.println("Les Asstes : ");
         for (Actif r : p.getActifs()){
             System.out.println("Nom d'Asset : " + r.getAsset().getNom()
@@ -179,7 +179,7 @@ public class Platform {
                 float valeur = quantite*r.getAsset().getPrixUnitaire();
                 float g = r.getValeurAchat()- valeur;
                 r.setValeurAchat(g);
-                String typeT = "Vente Asset ";
+                String typeT = "Vente";
                 transactions.add(new Transaction(typeT,date,p.getTrader(),r,valeur));
                 System.out.println("la Vente est fait avec Succes !!");
             }
@@ -191,6 +191,106 @@ public class Platform {
                     +" , Trader Nom : "+t.getTrader().getNom()+" , ID : "+t.getTrader().getId()+" , Asset : "
                     +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur());
         }
+    }
+
+
+    public static void TrassactionTrader(Scanner add){
+        System.out.println("Entre le ID du tader : ");
+        int id = add.nextInt();
+        System.out.println("Les transactions lie a ID : "+id);
+        for (Transaction t : transactions){
+            if (t.getTrader().getId() == id){
+                System.out.println("Date : " +t.getDate()+" , Asset : "
+                        +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur()
+                        +" , Trader Nom : "+t.getTrader().getNom());
+            }
+        }
+        System.out.println("Les transactions lie a ID : "+id);
+        List<Transaction> trader = transactions.stream()
+                .filter(g -> g.getTrader().getId() == id)
+                .toList();
+        for (Transaction z : trader){
+            System.out.println("Date : " +z.getDate()+" , Asset : "
+                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
+                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        }
+
+//        List<Transaction> results = transactions.stream()
+//                .filter(t -> t.getType().equals("Achat"))
+////                .map(String::toUpperCase)
+////                .sorted()
+//                .toList(); // or .collect(Collectors.toList()) for older Java versions
+//        System.out.println(results);
+    }
+
+    public static void TrassactionType(){
+        System.out.println("Transaction d'Achat : ");
+        for (Transaction t : transactions){
+            if (t.getType().equals("Achat")){
+            System.out.println("Date : " +t.getDate()+" , Asset : "
+                    +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur()
+                    +" , Trader Nom : "+t.getTrader().getNom()+" , ID : "+t.getTrader().getId());
+        }
+        }
+        List<Transaction> achat = transactions.stream()
+                .filter(g -> g.getType().equals("Achat"))
+                .toList();
+        for (Transaction z : achat){
+            System.out.println("Date : " +z.getDate()+" , Asset : "
+                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
+                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        }
+        System.out.println("Transaction de Vente : ");
+        List<Transaction> sell = transactions.stream()
+                .filter(g -> g.getType().equals("Vente"))
+                .toList();
+        for (Transaction z : sell){
+            System.out.println("Date : " +z.getDate()+" , Asset : "
+                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
+                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        }
+
+//        List<Transaction> results = transactions.stream()
+//                .filter(t -> t.getType().equals("Achat"))
+////                .map(String::toUpperCase)
+////                .sorted()
+//                .toList(); // or .collect(Collectors.toList()) for older Java versions
+//        System.out.println(results);
+    }
+    public static void TrassactionAsset(){
+        System.out.println("Transaction d'Achat : ");
+        for (Transaction t : transactions){
+            if (t.getType().equals("Achat")){
+                System.out.println("Date : " +t.getDate()+" , Asset : "
+                        +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur()
+                        +" , Trader Nom : "+t.getTrader().getNom()+" , ID : "+t.getTrader().getId());
+            }
+        }
+        List<Transaction> achat = transactions.stream()
+                .filter(g -> g.getActif().getAsset().getNom().equals(filter))
+                .forEach(System.out::println);
+//                .toList();
+        for (Transaction z : achat){
+            System.out.println("Date : " +z.getDate()+" , Asset : "
+                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
+                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        }
+        List<Transaction> sell = transactions.stream()
+                .filter(g -> g.getType().equals("Vente"))
+                .toList();
+        for (Transaction z : sell){
+            System.out.println("Date : " +z.getDate()+" , Asset : "
+                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
+                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        }
+
+//        List<Transaction> results = transactions.stream()
+//                .filter(t -> t.getType().equals("Achat"))
+////                .map(String::toUpperCase)
+////                .sorted()
+//                .toList(); // or .collect(Collectors.toList()) for older Java versions
+//        System.out.println(results);
+
     }
 
 }
