@@ -1,8 +1,10 @@
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import javax.swing.*;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Locale.filter;
+import static java.util.stream.Collectors.toList;
 
 public class Platform {
 
@@ -97,7 +99,7 @@ public class Platform {
         float quantite = budget/c.getPrixUnitaire();
         Actif r = new Actif(c,quantite,budget);
         p.setActifs(r);
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         String typeT = "Achat";
         transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est fait !!");
@@ -120,7 +122,7 @@ public class Platform {
         Actif r = new Actif(a,quantite,budget);
         p.setActifs(r);
         p.setBalance(p.getBalance()-budget);
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         String typeT = "Achat";
         transactions.add(new Transaction(typeT,date,p.getTrader(),r,budget));
         System.out.println("Achat est Fait !!");
@@ -175,7 +177,7 @@ public class Platform {
                 }
                 r.setQuantite(r.getQuantite()-quantite);
                 p.setBalance(p.getBalance()+(quantite*r.getAsset().getPrixUnitaire()));
-                LocalDateTime date = LocalDateTime.now();
+                LocalDate date = LocalDate.now();
                 float valeur = quantite*r.getAsset().getPrixUnitaire();
                 float g = r.getValeurAchat()- valeur;
                 r.setValeurAchat(g);
@@ -257,40 +259,190 @@ public class Platform {
 //                .toList(); // or .collect(Collectors.toList()) for older Java versions
 //        System.out.println(results);
     }
-    public static void TrassactionAsset(){
-        System.out.println("Transaction d'Achat : ");
-        for (Transaction t : transactions){
-            if (t.getType().equals("Achat")){
-                System.out.println("Date : " +t.getDate()+" , Asset : "
-                        +t.getActif().getAsset().getNom()+" , Valeur : "+t.getValeur()
-                        +" , Trader Nom : "+t.getTrader().getNom()+" , ID : "+t.getTrader().getId());
-            }
+    public static void FilterTransactionAsset(Scanner add){
+        System.out.println("Entre le nom d'Asset a chercher : ");
+        String nom = add.next();
+        for (Transaction g : transactions){
+        if (!Objects.equals(g.getActif().getAsset().getNom(), nom)) {
+            System.out.println("Asset n'existe pas !!");
+        }}
+        List<Transaction> asset = transactions.stream().filter(t -> t.getActif().getAsset().getNom().equals(nom))
+                .toList();
+        asset.stream().forEach(System.out::println);
+    }
+
+    public static void FilterTransactionDate(Scanner add){
+        System.out.println("Entre la date initial sous la form (aaaa-mm-jj) : ");
+        LocalDate date1 = LocalDate.parse(add.next());
+        System.out.println("Entre la date final sous la form (aaaa-mm-jj) : ");
+        LocalDate date2 = LocalDate.parse(add.next());
+//        for (Transaction g : transactions){
+//            if (!Objects.equals(g.getActif().getAsset().getNom(), nom)) {
+//                System.out.println("Asset n'existe pas !!");
+//            }}
+        List<Transaction> asset = transactions.stream().filter(t -> t.getDate().isBefore(date1) && date2.isBefore(t.getDate()))
+                .toList();
+        asset.stream().forEach(System.out::println);
+        if (asset.isEmpty()){
+            System.out.println("Aucune Transaction est dispo");
         }
-        List<Transaction> achat = transactions.stream()
-                .filter(g -> g.getActif().getAsset().getNom().equals(filter))
-                .forEach(System.out::println);
+    }
+
+    public static void OrderTransactionDate(Scanner add){
+        System.out.println("Entre l'Order 'C' pour Croissant et 'D' pour Décroissant : ");
+        String order = add.next();
+        if (order.equals("C")){
+            List<Transaction> asset = transactions.stream().sorted(Comparator.comparing(Transaction::getDate))
+                    .toList();
+            asset.stream().forEach(System.out::println);
+        } else if (order.equals("D")) {
+            List<Transaction> asset = transactions.stream().sorted(Comparator.comparing(Transaction::getDate).reversed())
+                    .toList();
+            asset.stream().forEach(System.out::println);
+        }else {
+            System.out.println("Aucune Transaction est dispo");
+        }
+    }
+
+    public static void OrderTransactionMontant(Scanner add){
+        System.out.println("Entre l'Order 'C' pour Croissant et 'D' pour Décroissant : ");
+        String order = add.next();
+        if (order.equals("C")){
+        List<Transaction> asset = transactions.stream().sorted(Comparator.comparing(Transaction::getValeur))
+                .toList();
+        asset.stream().forEach(System.out::println);
+        } else if (order.equals("D")) {
+            List<Transaction> asset = transactions.stream().sorted(Comparator.comparing(Transaction::getValeur).reversed())
+                    .toList();
+            asset.stream().forEach(System.out::println);
+        }else {
+            System.out.println("Aucune Transaction est dispo");
+        }
+    }
+
+    public static void volumeTransactionAsset(Scanner add){
+         Map<String, Float> TraderOrder = transactions.stream().collect
+                 (Collectors.groupingBy(t-> t.getActif().getAsset().getNom(),
+                 Collectors.reducing(0f,trans -> trans.getActif().getQuantite(), Float::sum)));
+        TraderOrder.forEach((nomActif, totalQuantite) -> {
+                System.out.println("  - Actif: " + nomActif + " | Quantité totale: " + totalQuantite);
+            });
+
+//        System.out.println("Entre le nom d'Asset a chercher : ");
+//        String nom = add.next();
+//        for (Transaction g : transactions){
+//            if (!Objects.equals(g.getActif().getAsset().getNom(), nom)) {
+//                System.out.println("Asset n'existe pas !!");
+//            }}
+//        List<Transaction> asset = transactions.stream().filter(t -> t.getActif().getAsset().getNom().equals(nom))
 //                .toList();
-        for (Transaction z : achat){
-            System.out.println("Date : " +z.getDate()+" , Asset : "
-                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
-                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+//        long count = asset.stream().count();
+//        System.out.println("le Nombre des transaction d'asset : "+nom +" , est : "+count);
+//        if (asset.isEmpty()){
+//            System.out.println("Aucune Transaction est dispo");
         }
-        List<Transaction> sell = transactions.stream()
+
+
+    public static void montantTransactionAchat(){
+        List<Transaction> achat = transactions.stream()
+                .filter(g -> g.getType().equals("Achat"))
+                .toList();
+        float montant = achat.stream()
+                .map(Transaction::getValeur)
+                .reduce(0f, Float::sum);
+        System.out.println("le Montant Total des transaction d'Achat est : "+montant);
+        if (achat.isEmpty()){
+            System.out.println("Aucune Transaction est dispo");
+        }
+    }
+
+    public static void montantTransactionVente(){
+        List<Transaction> achat = transactions.stream()
                 .filter(g -> g.getType().equals("Vente"))
                 .toList();
-        for (Transaction z : sell){
-            System.out.println("Date : " +z.getDate()+" , Asset : "
-                    +z.getActif().getAsset().getNom()+" , Valeur : "+z.getValeur()
-                    +" , Trader Nom : "+z.getTrader().getNom()+" , ID : "+z.getTrader().getId());
+        float montant = achat.stream()
+                .map(Transaction::getValeur)
+                .reduce(0f, Float::sum);
+        System.out.println("le Montant Total des transaction de Vente est : "+montant);
+        if (achat.isEmpty()){
+            System.out.println("Aucune Transaction est dispo");
         }
-
-//        List<Transaction> results = transactions.stream()
-//                .filter(t -> t.getType().equals("Achat"))
-////                .map(String::toUpperCase)
-////                .sorted()
-//                .toList(); // or .collect(Collectors.toList()) for older Java versions
-//        System.out.println(results);
-
     }
+
+    public static void nomberTransactionTrader(){
+//        System.out.println("Entre l'ID du Trader a chercher : ");
+//        int id = add.nextInt();
+//        for (Transaction g : transactions){
+//            if (id != g.getTrader().getId()) {
+//                System.out.println("Asset n'existe pas !!");
+//            }}
+//        List<Transaction> trader = transactions.stream().filter(t -> t.getTrader().getId() ==id)
+//                .toList();
+//        long count = trader.stream().count();
+//        System.out.println("le Nombre des transaction du Trader ID : "+id +" , est : "+count);
+//        if (trader.isEmpty()){
+//            System.out.println("Aucune Transaction est dispo");
+//        }
+//        int sommeA = liste.stream()
+//                .filter(e -> "A".equals(e.getId())) // Filtre l'élément A
+//                .mapToInt(Element::getValeur)      // Récupère la valeur
+//                .sum();
+        Map<Integer, Map<String, Float>> TraderOrder = transactions.stream().collect(Collectors.groupingBy(Transaction -> Transaction.getTrader().getId(),
+                Collectors.groupingBy(t-> t.getActif().getAsset().getNom(),
+                Collectors.reducing(0f,trans -> trans.getActif().getQuantite(), Float::sum))));
+        TraderOrder.forEach((traderId, actifsMap) -> {
+            System.out.println("Trader ID: " + traderId);
+
+            actifsMap.forEach((nomActif, totalQuantite) -> {
+                System.out.println("  - Actif: " + nomActif + " | Quantité totale: " + totalQuantite);
+            });
+        });
+
+//        Map<Trader, Float> trader = transactions.stream()
+//                .collect(Collectors.groupingBy(Transaction::getTrader, Collectors.reducing(0,transaction -> transaction.getActif().getQuantite(), Float::sum)));
+//
+//        trader.forEach((trad, somme)-> System.out.println(trad+" , Volume total des échanges : "+somme));
+    }
+
+    public static void nomberTransactionTotal(){
+        long count = transactions.stream().count();
+        System.out.println("le Nombre des transaction total : "+count);
+        if (transactions.isEmpty()){
+            System.out.println("Aucune Transaction est trouve !!");
+        }
+    }
+
+    public static void topNTraders(Scanner add){
+        System.out.println("Entre le nomber des Trader a ordonner : ");
+        int n = add.nextInt();
+        Map<Trader, Float > trader = transactions.stream()
+                .collect(Collectors.groupingBy(Transaction::getTrader, Collectors.reducing(0f,Transaction::getValeur, Float::sum)));
+        System.out.println("Voila le classment des "+n+" Top Traders par Volume : ");
+        trader.entrySet().stream()
+                .sorted(Map.Entry.<Trader, Float>comparingByValue().reversed())
+                .limit(n)
+                .forEach(entry -> System.out.println(entry.getKey() +" , volume total des échanges : "+entry.getValue()));
+//        trader.entrySet().stream()
+//                .sorted(Map.Entry.<Trader, Float>comparingByValue().reversed())
+//                .limit(n)
+//                .forEach(entry -> System.out.println(entry.getKey() + "  , volume total des échanges : " + entry.getValue()));
+
+
+//        perOrder.forEach((trad, somme)-> System.out.println(trad+" , volume total des échanges : "+somme));
+    }
+
+    public static void topActif(){
+        Map<Asset, Float> actifTop = transactions.stream().collect
+                (Collectors.groupingBy(t-> t.getActif().getAsset(),
+                        Collectors.reducing(0f,trans -> trans.getActif().getQuantite(), Float::sum)));
+        System.out.println("l’instrument financier le plus échanger :");
+        actifTop.entrySet().stream()
+                .sorted(Map.Entry.<Asset , Float>comparingByValue().reversed())
+                .limit(1)
+                .forEach(entry -> {
+            System.out.println(entry.getKey() + " | Quantité totale: " + entry.getValue());});
+    }
+
+
 
 }

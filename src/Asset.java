@@ -110,10 +110,8 @@ abstract class Asset {
 
     @Override
     public String toString() {
-        return "Asset{" +
+        return "Asset :" +
                 "nom='" + nom + '\'' +
-                ", prixUnitaire=" + prixUnitaire +
-                ", type='" + type + '\'' +
-                '}';
+                ", prixUnitaire=" + prixUnitaire +" ";
     }
 }

@@ -1,13 +1,13 @@
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Transaction {
     private String type ;
-    private LocalDateTime date ;
+    private LocalDate date ;
     private Trader trader;
     private Actif actif ;
     private float valeur ;
 
-    public Transaction(String type, LocalDateTime date, Trader trader, Actif actif, float valeur) {
+    public Transaction(String type, LocalDate date, Trader trader, Actif actif, float valeur) {
         this.type = type;
         this.date = date;
         this.trader = trader;
@@ -23,11 +23,11 @@ public class Transaction {
         this.valeur = valeur;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -55,5 +55,14 @@ public class Transaction {
         this.type = type;
     }
 
-
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "type='" + type + '\'' +
+                ", date : " + date +
+                ", actif : " + actif.getAsset().getNom() +
+                ", valeur : " + valeur +
+                ", Nom du trader : " + trader.getNom() +
+                " , Id du Trader : "+trader.getId()+'}';
+    }
 }

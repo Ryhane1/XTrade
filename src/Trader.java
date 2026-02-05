@@ -23,4 +23,11 @@ public class Trader extends Person {
 
     public void setSoldInitial(float soldInitial) {
         this.soldInitial = soldInitial;}
+
+    @Override
+    public String toString() {
+        return "Trader : " +
+                " , Nome du Trader : "+getNom()+
+                "id : " + id ;
+    }
 }
